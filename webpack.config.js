@@ -28,7 +28,7 @@ const config = {
 
   output: {
     path: resolve('./dist'),
-    // publicPath: `${pkg.path === '/' ? '' : pkg.path}/assets/`,
+    publicPath: `${pkg.path === '/' ? '' : pkg.path}/`,
     filename: IS_PROD ? 'js/[name].[chunkhash].js' : 'js/[name].js',
     chunkFilename: IS_PROD ? 'js/[name].[chunkhash].js' : 'js/[name].chunk.js' // works with lazy loading
   },
@@ -193,7 +193,8 @@ if (!IS_PROD) {
     open: true, // 自动打开浏览器
     hot: true, // 开启热更新
     overlay: true, // 浏览器页面上的显示错误
-    historyApiFallback: true
+    historyApiFallback: true,
+    hotOnly: true
   };
 }
 

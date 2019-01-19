@@ -29,8 +29,15 @@ const render = Component => {
 render(Route);
 
 // Webpack Hot Module Replacement API
+// if (module.hot) {
+//   module.hot.accept('./router', () => {
+//     console.log('Accepting the updated printMe module!');
+//     render(Route);
+//   });
+// }
+
 if (module.hot) {
-  module.hot.accept('./router', () => {
+  module.hot.accept(() => {
     console.log('Accepting the updated printMe module!');
     render(Route);
   });
