@@ -1,8 +1,8 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import { createStore, combineReducers } from 'redux';
 // import thunk from 'redux-thunk';
 
-let store = createStore(
-  combineReducers({}),
+const store = createStore(
+  combineReducers({})
   // applyMiddleware(thunk)
 );
 

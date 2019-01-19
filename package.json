@@ -11,10 +11,29 @@
     "iOS >= 7",
     "Android >= 4"
   ],
+  "precommit": [
+    "lint:staged",
+    "lint"
+  ],
+  "lint-staged": {
+    "*.{js, jsx}": [
+      "eslint --no-ignore --fix",
+      "prettier --write",
+      "git add --force"
+    ],
+    "*.{css,less,styl,scss,sass,sss}": [
+      "stylelint --fix",
+      "git add --force"
+    ]
+  },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack-dev-server --config webpack.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npm-run-all lint:js lint:css",
+    "lint:js": "eslint src",
+    "lint:css": "stylelint \"src/**/*.{css,less,styl,scss,sass,sss}\" --fix",
+    "lint:staged": "lint-staged"
   },
   "author": "robust",
   "license": "ISC",
@@ -37,20 +56,26 @@
     "eslint": "^4.14.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "lint-staged": "^7.3.0",
     "mini-css-extract-plugin": "^0.5.0",
+    "npm-run-all": "^4.1.5",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.15.3",
     "react-hot-loader": "^4.6.3",
     "style-loader": "^0.23.1",
+    "stylelint": "^8.2.0",
+    "stylelint-config-standard": "^18.0.0",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.0.3",

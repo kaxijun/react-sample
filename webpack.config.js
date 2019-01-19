@@ -8,28 +8,22 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const autoprefixer = require('autoprefixer');
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 const ROOT_PATH = path.resolve(__dirname, '.');
-const resolve = (dir) => path.join(ROOT_PATH, dir);
+const resolve = dir => path.join(ROOT_PATH, dir);
 
-console.log(IS_PROD, resolve('src'))
+console.log(IS_PROD, resolve('src'));
 
 const config = {
   mode: IS_PROD ? 'production' : 'development', // 模式配置
   devtool: 'inline-source-map',
   entry: {
-    main: IS_PROD ?
-      [
-        'babel-polyfill',
-        './src/main.js'
-      ] : [
-      'babel-polyfill',
-      'react-hot-loader/patch',
-        resolve('src/main.js')
-      ],
+    main: IS_PROD
+      ? ['babel-polyfill', './src/main.js']
+      : ['babel-polyfill', 'react-hot-loader/patch', resolve('src/main.js')]
   },
 
   output: {
@@ -46,7 +40,7 @@ const config = {
       component: path.join(__dirname, 'src/component'),
       actions: path.join(__dirname, 'src/redux/actions'),
       reducers: path.join(__dirname, 'src/redux/reducers'),
-      '@': resolve('src'),
+      '@': resolve('src')
     },
     // 省略后缀
     extensions: ['.js', '.jsx', '.json', '.css', '.scss', '.less']
@@ -59,7 +53,7 @@ const config = {
         include: [
           resolve('src'),
           // webpack-dev-server#1090 for Safari
-          resolve('/node_modules/webpack-dev-server/'),
+          resolve('/node_modules/webpack-dev-server/')
         ],
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -76,14 +70,14 @@ const config = {
             ],
             'stage-2',
             'react'
-          ],
+          ]
         }
       },
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          {loader: 'css-loader', options: {importLoaders: 1}},
+          { loader: 'css-loader', options: { importLoaders: 1 } },
           {
             loader: 'postcss-loader',
             options: {
@@ -95,14 +89,13 @@ const config = {
             }
           }
         ]
-
       },
       {
         test: /\.less$/,
         exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
-          {loader: 'css-loader'},
+          { loader: 'css-loader' },
           {
             loader: 'postcss-loader',
             options: {
@@ -113,9 +106,8 @@ const config = {
               ]
             }
           },
-          {loader: 'less-loader'}
+          { loader: 'less-loader' }
         ]
-
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -137,13 +129,12 @@ const config = {
         }
       }
     ]
-
-  },//处理对应模块
+  }, // 处理对应模块
   plugins: [
     new CleanWebpackPlugin('dist'),
     new HtmlWebpackPlugin({
-      template: './public/index.html',//在src目录下创建一个index.html来充当模板
-      hash: true, //打包后的bundle.js后面会加上hash串
+      template: './public/index.html', // 在src目录下创建一个index.html来充当模板
+      hash: true, // 打包后的bundle.js后面会加上hash串
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -154,46 +145,29 @@ const config = {
         keepClosingSlash: true,
         minifyJS: true,
         minifyCSS: true,
-        minifyURLs: true,
-      },
+        minifyURLs: true
+      }
     }),
 
     new MiniCssExtractPlugin({
       filename: IS_PROD ? 'css/[name].[contenthash].css' : 'css/[name].css'
-    }),
-
-    // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different components can be deduped.
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: {
-        safe: true
-      }
-    }),
-
-    new CompressionPlugin({
-      filename: '[path].gz[query]',
-      algorithm: 'gzip',
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
-      minRatio: 0.8
-    }),
-
-  ],//对应插件
+    })
+  ], // 对应插件
 
   optimization: {
-    minimize: IS_PROD, //是否进行代码压缩
+    minimize: IS_PROD, // 是否进行代码压缩
     splitChunks: {
-      chunks: "async",
-      minSize: 30000, //模块大于30k会被抽离到公共模块
-      minChunks: 1, //模块出现1次就会被抽离到公共模块
-      maxAsyncRequests: 5, //异步模块，一次最多只能被加载5个
-      maxInitialRequests: 3, //入口模块最多只能加载3个
+      chunks: 'async',
+      minSize: 30000, // 模块大于30k会被抽离到公共模块
+      minChunks: 1, // 模块出现1次就会被抽离到公共模块
+      maxAsyncRequests: 5, // 异步模块，一次最多只能被加载5个
+      maxInitialRequests: 3, // 入口模块最多只能加载3个
       name: true,
       cacheGroups: {
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
+          reuseExistingChunk: true
         },
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -202,7 +176,7 @@ const config = {
       }
     },
     runtimeChunk: {
-      name: "manifest"
+      name: 'manifest'
     }
   }
 };
@@ -216,9 +190,9 @@ if (!IS_PROD) {
   config.devServer = {
     host: '0.0.0.0',
     port: '3880',
-    open: true,      //自动打开浏览器
-    hot: true,       //开启热更新
-    overlay: true,   //浏览器页面上的显示错误
+    open: true, // 自动打开浏览器
+    hot: true, // 开启热更新
+    overlay: true, // 浏览器页面上的显示错误
     historyApiFallback: true
   };
 }
@@ -240,9 +214,21 @@ if (IS_PROD) {
     // }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
+    new CompressionPlugin({
+      filename: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8
+    }),
 
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: {
+        safe: true
+      }
+    }),
 
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
@@ -250,7 +236,7 @@ if (IS_PROD) {
       openAnalyzer: false,
       reportFilename: resolve('webpack-report/index.html'),
       statsFilename: resolve('webpack-report/stats.json')
-    }),
+    })
     // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/)
   );
 
