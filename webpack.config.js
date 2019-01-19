@@ -21,9 +21,7 @@ const config = {
   mode: IS_PROD ? 'production' : 'development', // 模式配置
   devtool: 'inline-source-map',
   entry: {
-    main: IS_PROD
-      ? ['babel-polyfill', './src/main.js']
-      : ['babel-polyfill', 'react-hot-loader/patch', resolve('src/main.js')]
+    main: ['babel-polyfill', './src/main.js']
   },
 
   output: {
