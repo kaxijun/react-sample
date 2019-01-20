@@ -12,7 +12,7 @@ export default class Page1 extends Component {
       <div>
         <p>{this.state.name}</p>
         this is about~hi!!!!~~~~~~~~
-        <p>1233331111</p>
+        <p>ha~</p>
       </div>
     )
   }

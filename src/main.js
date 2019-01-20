@@ -23,3 +23,7 @@ const render = Component => {
 };
 
 render(Route);
+
+if (module.hot) {
+  module.hot.accept();
+}

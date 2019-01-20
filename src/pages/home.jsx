@@ -10,7 +10,7 @@ export default class Home extends Component {
     return (
       <div>
         this is home!!!!!~{this.state.name}~~是的~!
-        <p>123</p>
+        <p>124444443</p>
       </div>
     );
   }

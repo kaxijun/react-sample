@@ -15,11 +15,12 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 const ROOT_PATH = path.resolve(__dirname, '.');
 const resolve = dir => path.join(ROOT_PATH, dir);
 
-console.log(IS_PROD, resolve('src'));
+console.log('IS_PROD', IS_PROD);
+console.log('mode', IS_PROD ? 'production' : 'development');
 
 const config = {
   mode: IS_PROD ? 'production' : 'development', // 模式配置
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
   entry: {
     main: ['babel-polyfill', './src/main.js']
   },
@@ -74,7 +75,7 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          IS_PROD ? MiniCssExtractPlugin.loader : { loader: 'style-loader' },
           { loader: 'css-loader', options: { importLoaders: 1 } },
           {
             loader: 'postcss-loader',
@@ -90,9 +91,9 @@ const config = {
       },
       {
         test: /\.less$/,
-        exclude: /node_modules/,
+        exclude: resolve('node_modules'),
         use: [
-          MiniCssExtractPlugin.loader,
+          IS_PROD ? MiniCssExtractPlugin.loader : { loader: 'style-loader' },
           { loader: 'css-loader' },
           {
             loader: 'postcss-loader',
@@ -125,6 +126,10 @@ const config = {
             name: 'fonts/[name].[hash:7].[ext]'
           }
         }
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader'
       }
     ]
   }, // 处理对应模块
@@ -133,6 +138,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: './public/index.html', // 在src目录下创建一个index.html来充当模板
       hash: true, // 打包后的bundle.js后面会加上hash串
+      chunksSortMode: 'none',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -145,15 +151,10 @@ const config = {
         minifyCSS: true,
         minifyURLs: true
       }
-    }),
-
-    new MiniCssExtractPlugin({
-      filename: IS_PROD ? 'css/[name].[contenthash].css' : 'css/[name].css'
     })
   ], // 对应插件
-
   optimization: {
-    minimize: IS_PROD, // 是否进行代码压缩
+    minimize: true, // 是否进行代码压缩
     splitChunks: {
       chunks: 'async',
       minSize: 30000, // 模块大于30k会被抽离到公共模块
@@ -204,13 +205,6 @@ if (IS_PROD) {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-
-    // new webpack.optimize.OccurrenceOrderPlugin(),
-    // new AssetsWebpackPlugin({
-    //   filename: 'manifest.json',
-    //   path: resolve('public/assets'),
-    //   prettyPrint: true
-    // }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     new CompressionPlugin({
@@ -235,8 +229,11 @@ if (IS_PROD) {
       openAnalyzer: false,
       reportFilename: resolve('webpack-report/index.html'),
       statsFilename: resolve('webpack-report/stats.json')
-    })
+    }),
     // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/)
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash:7].css'
+    })
   );
 
   // https://webpack.js.org/configuration/performance
