@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+
 import FastClick from 'fastclick';
 
 import React from 'react';
@@ -7,6 +8,8 @@ import ReactDom from 'react-dom';
 // import store from '@/store/store';
 import Route from './router';
 
+// stylesheet
+import 'normalize.css';
 import './assets/style/index.less';
 
 FastClick.attach(document.body);

@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 
 export default class Home extends Component {
 
-  state = {
-    name: 'liao1', //
-  };
 
   render() {
     return (
-      <div>
-        this is home!!!!!~{this.state.name}~~是的~!
-        <p>124444443</p>
+      <div className="demo">
+        <div className="inner">
+          <p>这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试</p>
+        </div>
       </div>
     );
   }
